@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
@@ -7,39 +7,54 @@ const initialState = {
 };
 
 export const addReview = createAsyncThunk(
-  "/order/addReview",
-  async (formdata) => {
+  "/review/addReview",
+  async (reviewData) => {
     const response = await axios.post(
-      `http://localhost:5000/api/shop/review/add`,
-      formdata
+      "http://localhost:5000/api/shop/review/add",
+      reviewData,
+      {
+        withCredentials: true,
+      }
     );
 
     return response.data;
   }
 );
 
-export const getReviews = createAsyncThunk("/order/getReviews", async (id) => {
-  const response = await axios.get(
-    `http://localhost:5000/api/shop/review/${id}`
-  );
+export const fetchReviews = createAsyncThunk(
+  "/review/fetchReviews",
+  async (productId) => {
+    const response = await axios.get(
+      `http://localhost:5000/api/shop/review/get/${productId}`
+    );
 
-  return response.data;
-});
+    return response.data;
+  }
+);
 
 const reviewSlice = createSlice({
-  name: "reviewSlice",
+  name: "shopReview",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getReviews.pending, (state) => {
+      .addCase(addReview.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getReviews.fulfilled, (state, action) => {
+      .addCase(addReview.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(addReview.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(fetchReviews.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchReviews.fulfilled, (state, action) => {
         state.isLoading = false;
         state.reviews = action.payload.data;
       })
-      .addCase(getReviews.rejected, (state) => {
+      .addCase(fetchReviews.rejected, (state, action) => {
         state.isLoading = false;
         state.reviews = [];
       });

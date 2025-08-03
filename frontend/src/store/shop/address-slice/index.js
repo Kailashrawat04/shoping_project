@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
@@ -7,11 +7,14 @@ const initialState = {
 };
 
 export const addNewAddress = createAsyncThunk(
-  "/addresses/addNewAddress",
+  "/address/addNewAddress",
   async (formData) => {
     const response = await axios.post(
       "http://localhost:5000/api/shop/address/add",
-      formData
+      formData,
+      {
+        withCredentials: true,
+      }
     );
 
     return response.data;
@@ -19,22 +22,25 @@ export const addNewAddress = createAsyncThunk(
 );
 
 export const fetchAllAddresses = createAsyncThunk(
-  "/addresses/fetchAllAddresses",
-  async (userId) => {
+  "/address/fetchAllAddresses",
+  async () => {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/address/get/${userId}`
+      "http://localhost:5000/api/shop/address/get"
     );
 
     return response.data;
   }
 );
 
-export const editaAddress = createAsyncThunk(
-  "/addresses/editaAddress",
-  async ({ userId, addressId, formData }) => {
+export const editAddress = createAsyncThunk(
+  "/address/editAddress",
+  async ({ id, formData }) => {
     const response = await axios.put(
-      `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
-      formData
+      `http://localhost:5000/api/shop/address/edit/${id}`,
+      formData,
+      {
+        withCredentials: true,
+      }
     );
 
     return response.data;
@@ -42,10 +48,13 @@ export const editaAddress = createAsyncThunk(
 );
 
 export const deleteAddress = createAsyncThunk(
-  "/addresses/deleteAddress",
-  async ({ userId, addressId }) => {
+  "/address/deleteAddress",
+  async (id) => {
     const response = await axios.delete(
-      `http://localhost:5000/api/shop/address/delete/${userId}/${addressId}`
+      `http://localhost:5000/api/shop/address/delete/${id}`,
+      {
+        withCredentials: true,
+      }
     );
 
     return response.data;
@@ -53,7 +62,7 @@ export const deleteAddress = createAsyncThunk(
 );
 
 const addressSlice = createSlice({
-  name: "address",
+  name: "shopAddress",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -64,7 +73,7 @@ const addressSlice = createSlice({
       .addCase(addNewAddress.fulfilled, (state, action) => {
         state.isLoading = false;
       })
-      .addCase(addNewAddress.rejected, (state) => {
+      .addCase(addNewAddress.rejected, (state, action) => {
         state.isLoading = false;
       })
       .addCase(fetchAllAddresses.pending, (state) => {
@@ -74,7 +83,7 @@ const addressSlice = createSlice({
         state.isLoading = false;
         state.addressList = action.payload.data;
       })
-      .addCase(fetchAllAddresses.rejected, (state) => {
+      .addCase(fetchAllAddresses.rejected, (state, action) => {
         state.isLoading = false;
         state.addressList = [];
       });
