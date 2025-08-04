@@ -1,17 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { fetchProductDetails } from "@/store/shop/products-slice";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 const ProductDetails = () => {
   const { productId } = useParams();
+  const dispatch = useDispatch();
   const { productDetails, isLoading } = useSelector(
     (state) => state.shoppingProducts
   );
 
+  useEffect(() => {
+    if (productId) {
+      dispatch(fetchProductDetails(productId));
+    }
+  }, [dispatch, productId]);
+
   if (isLoading) return <div>Loading...</div>;
+
+  if (!productDetails) {
+    return <div>Product not found</div>;
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

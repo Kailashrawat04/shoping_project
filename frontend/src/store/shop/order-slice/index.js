@@ -10,7 +10,7 @@ export const createNewOrder = createAsyncThunk(
   "/order/createOrder",
   async (orderData) => {
     const response = await axios.post(
-      "http://localhost:5000/api/shop/order/create",
+      "/api/shop/order/create",
       orderData,
       {
         withCredentials: true,
@@ -27,7 +27,7 @@ export const capturePayment = createAsyncThunk(
   "/order/capturePayment",
   async ({ paymentId, payerId, orderId }) => {
     const response = await axios.post(
-      "http://localhost:5000/api/shop/order/capture",
+      "/api/shop/order/capture",
       { paymentId, payerId, orderId },
       {
         withCredentials: true,
@@ -42,7 +42,7 @@ export const fetchOrders = createAsyncThunk(
   "/order/fetchOrders",
   async (userId) => {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/order/get/${userId}`
+      `/api/shop/order/get/${userId}`
     );
 
     return response.data;

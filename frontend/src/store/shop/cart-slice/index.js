@@ -10,7 +10,7 @@ export const addToCart = createAsyncThunk(
   "/cart/addToCart",
   async ({ userId, productId, quantity }) => {
     const response = await axios.post(
-      "http://localhost:5000/api/shop/cart/add",
+      "/api/shop/cart/add",
       { userId, productId, quantity },
       {
         withCredentials: true,
@@ -25,7 +25,7 @@ export const fetchCartItems = createAsyncThunk(
   "/cart/fetchCartItems",
   async (userId) => {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/cart/get/${userId}`
+      `/api/shop/cart/get/${userId}`
     );
 
     return response.data;
@@ -36,7 +36,7 @@ export const deleteCartItem = createAsyncThunk(
   "/cart/deleteCartItem",
   async ({ userId, productId }) => {
     const response = await axios.delete(
-      `http://localhost:5000/api/shop/cart/delete/${userId}/${productId}`,
+      `/api/shop/cart/delete/${userId}/${productId}`,
       {
         withCredentials: true,
       }
@@ -50,7 +50,7 @@ export const updateCartQuantity = createAsyncThunk(
   "/cart/updateCartQuantity",
   async ({ userId, productId, quantity }) => {
     const response = await axios.put(
-      `http://localhost:5000/api/shop/cart/update/${userId}/${productId}`,
+      `/api/shop/cart/update/${userId}/${productId}`,
       { quantity },
       {
         withCredentials: true,

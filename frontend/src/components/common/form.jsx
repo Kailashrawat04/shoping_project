@@ -48,11 +48,11 @@ const CommonForm = ({ formControls, formData, setFormData, onSubmit, buttonText,
           key={controlItem.id}
           label={controlItem.label}
           type={controlItem.type}
-          name={controlItem.name}
-          value={formData[controlItem.name]}
+          name={controlItem.id}
+          value={formData[controlItem.id]}
           onChange={(e) => setFormData({ ...formData, [e.target.name]: e.target.value })}
           placeholder={controlItem.placeholder}
-          required={controlItem.required}
+          required={controlItem.required}     
         />
       ))}
       <FormButton type="submit">{buttonText}</FormButton>

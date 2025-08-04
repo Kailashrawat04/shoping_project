@@ -10,7 +10,7 @@ export const addNewAddress = createAsyncThunk(
   "/address/addNewAddress",
   async (formData) => {
     const response = await axios.post(
-      "http://localhost:5000/api/shop/address/add",
+      "/api/shop/address/add",
       formData,
       {
         withCredentials: true,
@@ -25,7 +25,7 @@ export const fetchAllAddresses = createAsyncThunk(
   "/address/fetchAllAddresses",
   async () => {
     const response = await axios.get(
-      "http://localhost:5000/api/shop/address/get"
+      "/api/shop/address/get"
     );
 
     return response.data;
@@ -36,7 +36,7 @@ export const editAddress = createAsyncThunk(
   "/address/editAddress",
   async ({ id, formData }) => {
     const response = await axios.put(
-      `http://localhost:5000/api/shop/address/edit/${id}`,
+      `/api/shop/address/edit/${id}`,
       formData,
       {
         withCredentials: true,
@@ -51,7 +51,7 @@ export const deleteAddress = createAsyncThunk(
   "/address/deleteAddress",
   async (id) => {
     const response = await axios.delete(
-      `http://localhost:5000/api/shop/address/delete/${id}`,
+      `/api/shop/address/delete/${id}`,
       {
         withCredentials: true,
       }
