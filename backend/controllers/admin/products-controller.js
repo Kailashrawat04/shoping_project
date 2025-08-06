@@ -1,3 +1,4 @@
+
 const { imageUploadUtil } = require("../../helpers/cloudinary");
 const Product = require("../../models/Product");
 
@@ -23,9 +24,17 @@ const handleImageUpload = async (req, res) => {
 //add a new product
 const addProduct = async (req, res) => {
   try {
+    console.log('=== Add Product Request Received ===');
+    console.log('Request body:', req.body);
+    console.log('Request file:', req.file ? {
+      fieldname: req.file.fieldname,
+      originalname: req.file.originalname,
+      mimetype: req.file.mimetype,
+      size: req.file.size
+    } : 'No file uploaded');
+    
     const {
-      image,
-      title,
+      name,
       description,
       category,
       brand,
@@ -35,30 +44,92 @@ const addProduct = async (req, res) => {
       averageReview,
     } = req.body;
 
-    console.log(averageReview, "averageReview");
+    // Validate required fields
+    if (!name || !description || !category || !brand || !price || !totalStock) {
+      console.log('Missing required fields:', {
+        name: !name,
+        description: !description,
+        category: !category,
+        brand: !brand,
+        price: !price,
+        totalStock: !totalStock
+      });
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields",
+        missingFields: {
+          name: !name,
+          description: !description,
+          category: !category,
+          brand: !brand,
+          price: !price,
+          totalStock: !totalStock
+        }
+      });
+    }
 
-    const newlyCreatedProduct = new Product({
-      image,
-      title,
+    let imageUrl = "";
+    if (req.file) {
+      console.log('Processing image upload...');
+      try {
+        const b64 = Buffer.from(req.file.buffer).toString("base64");
+        const url = "data:" + req.file.mimetype + ";base64," + b64;
+        const uploadResult = await imageUploadUtil(url);
+        imageUrl = uploadResult.secure_url;
+        console.log('Image uploaded successfully:', imageUrl);
+      } catch (uploadError) {
+        console.error('Image upload failed:', uploadError);
+        return res.status(500).json({
+          success: false,
+          message: "Image upload failed",
+          error: uploadError.message
+        });
+      }
+    } else {
+      console.log('No image file provided');
+    }
+
+    console.log('Creating new product with data:', {
+      title: name,
       description,
       category,
       brand,
-      price,
-      salePrice,
-      totalStock,
-      averageReview,
+      price: parseFloat(price),
+      salePrice: salePrice ? parseFloat(salePrice) : 0,
+      totalStock: parseInt(totalStock),
+      image: imageUrl
+    });
+
+    const newlyCreatedProduct = new Product({
+      image: imageUrl,
+      title: name,
+      description,
+      category,
+      brand,
+      price: parseFloat(price),
+      salePrice: salePrice ? parseFloat(salePrice) : 0,
+      totalStock: parseInt(totalStock),
+      averageReview: averageReview || 0,
     });
 
     await newlyCreatedProduct.save();
+    console.log('Product saved successfully:', newlyCreatedProduct._id);
+    
     res.status(201).json({
       success: true,
       data: newlyCreatedProduct,
     });
   } catch (e) {
-    console.log(e);
+    console.error('=== Add Product Error ===');
+    console.error('Error name:', e.name);
+    console.error('Error message:', e.message);
+    console.error('Error stack:', e.stack);
+    
     res.status(500).json({
       success: false,
-      message: "Error occured",
+      message: "Error occurred while adding product",
+      error: e.message,
+      details: e.name
     });
   }
 };

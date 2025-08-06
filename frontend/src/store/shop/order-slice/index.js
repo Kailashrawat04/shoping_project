@@ -74,6 +74,15 @@ const orderSlice = createSlice({
       .addCase(fetchOrders.rejected, (state, action) => {
         state.isLoading = false;
         state.orders = [];
+      })
+      .addCase(capturePayment.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(capturePayment.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(capturePayment.rejected, (state, action) => {
+        state.isLoading = false;
       });
   },
 });

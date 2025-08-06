@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { addFeatureImage, getFeatureImages } from "@/store/common-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function AdminDashboard() {
   const [imageFile, setImageFile] = useState(null);
@@ -29,8 +30,22 @@ function AdminDashboard() {
 
   console.log(featureImageList, "featureImageList");
 
+  const navigate = useNavigate();
+
+  const handleAddNewProduct = () => {
+    navigate('/admin/add-product');
+  };
+
   return (
     <div>
+      <div className="mb-6">
+        <Button 
+          onClick={handleAddNewProduct} 
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+        >
+          Add New Product
+        </Button>
+      </div>
       <ProductImageUpload
         imageFile={imageFile}
         setImageFile={setImageFile}
@@ -39,7 +54,10 @@ function AdminDashboard() {
         setImageLoadingState={setImageLoadingState}
         imageLoadingState={imageLoadingState}
         isCustomStyling={true}
-        // isEditMode={currentEditedId !== null}
+        onImageUpload={(file) => {
+          setImageFile(file);
+          setUploadedImageUrl(URL.createObjectURL(file));
+        }}
       />
       <Button onClick={handleUploadFeatureImage} className="mt-5 w-full">
         Upload

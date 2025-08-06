@@ -7,6 +7,9 @@ import AdminDashboard from "./pages/admin-view/dashboard";
 import AdminProducts from "./pages/admin-view/products";
 import AdminOrders from "./pages/admin-view/orders";
 import AdminFeatures from "./pages/admin-view/features";
+import AddProduct from "./pages/admin-view/add-product";
+import UpdateProduct from "./pages/admin-view/update-product";
+import SeeProducts from "./pages/admin-view/see-products";
 import ShoppingLayout from "./components/shopping-view/layout";
 import NotFound from "./pages/not-found";
 import ShoppingHome from "./pages/shopping-view/home";
@@ -72,6 +75,9 @@ function App() {
           <Route path="products" element={<AdminProducts />} />
           <Route path="orders" element={<AdminOrders />} />
           <Route path="features" element={<AdminFeatures />} />
+          <Route path="add-product" element={<AddProduct />} />
+          <Route path="update-product" element={<UpdateProduct />} />
+          <Route path="see-products" element={<SeeProducts />} />
         </Route>
         <Route
           path="/shop"

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CommonForm from "../common/form";
-import { DialogContent } from "../ui/dialog";
+import { DialogContent, DialogDescription } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
@@ -43,7 +43,10 @@ function AdminOrderDetailsView({ orderDetails }) {
   }
 
   return (
-    <DialogContent className="sm:max-w-[600px]">
+    <DialogContent className="sm:max-w-[600px]" aria-describedby="order-details-description">
+      <DialogDescription id="order-details-description" className="sr-only">
+        Detailed information about order {orderDetails?._id} including items, shipping details, and order status
+      </DialogDescription>
       <div className="grid gap-6">
         <div className="grid gap-2">
           <div className="flex mt-6 items-center justify-between">

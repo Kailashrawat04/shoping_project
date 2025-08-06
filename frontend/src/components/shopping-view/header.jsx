@@ -71,10 +71,6 @@ function HeaderRightContent() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  function handleLogout() {
-    dispatch(logoutUser());
-  }
-
   useEffect(() => {
     dispatch(fetchCartItems(user?.id));
   }, [dispatch]);
@@ -122,7 +118,13 @@ function HeaderRightContent() {
             Account
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout}>
+          <DropdownMenuItem
+            onClick={() => {
+              dispatch(logoutUser()).then(() => {
+                navigate("/auth/register");
+              });
+            }}
+          >
             <LogOut className="mr-2 h-4 w-4" />
             Logout
           </DropdownMenuItem>
@@ -134,10 +136,27 @@ function HeaderRightContent() {
 
 function ShoppingHeader() {
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    dispatch(logoutUser()).then(() => {
+      navigate("/auth/register");
+    });
+  }
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-1 mr-4 text-sm font-semibold text-red-600 hover:text-red-800"
+          aria-label="Logout"
+          title="Logout"
+        >
+          <LogOut className="h-5 w-5" />
+          Logout
+        </button>
         <Link to="/shop/home" className="flex items-center gap-2">
           <HousePlug className="h-6 w-6" />
           <span className="font-bold">Ecommerce</span>

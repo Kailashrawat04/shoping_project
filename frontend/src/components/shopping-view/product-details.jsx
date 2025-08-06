@@ -9,7 +9,7 @@ const ProductDetails = () => {
   const { productId } = useParams();
   const dispatch = useDispatch();
   const { productDetails, isLoading } = useSelector(
-    (state) => state.shoppingProducts
+    (state) => state.shopProducts
   );
 
   useEffect(() => {
