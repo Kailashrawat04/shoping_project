@@ -4,6 +4,13 @@ import { addFeatureImage, getFeatureImages } from "@/store/common-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { Menu } from "lucide-react";
 
 function AdminDashboard() {
   const [imageFile, setImageFile] = useState(null);
@@ -11,8 +18,6 @@ function AdminDashboard() {
   const [imageLoadingState, setImageLoadingState] = useState(false);
   const dispatch = useDispatch();
   const { featureImageList } = useSelector((state) => state.commonFeature);
-
-  console.log(uploadedImageUrl, "uploadedImageUrl");
 
   function handleUploadFeatureImage() {
     dispatch(addFeatureImage(uploadedImageUrl)).then((data) => {
@@ -28,16 +33,39 @@ function AdminDashboard() {
     dispatch(getFeatureImages());
   }, [dispatch]);
 
-  console.log(featureImageList, "featureImageList");
-
   const navigate = useNavigate();
 
   const handleAddNewProduct = () => {
     navigate('/admin/add-product');
   };
 
+  const handleNavigate = (path) => {
+    navigate(path);
+  };
+
   return (
     <div>
+      <div className="flex items-center mb-6">
+        <DropdownMenu>
+          <DropdownMenuTrigger className="p-2 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <Menu className="w-6 h-6" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="bottom" align="start" className="w-48">
+            <DropdownMenuItem onClick={() => handleNavigate('/admin/dashboard')}>
+              Dashboard
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleNavigate('/admin/add-product')}>
+              Add Products
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleNavigate('/admin/products')}>
+              Show Products
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleNavigate('/admin/orders')}>
+              Orders
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <div className="mb-6">
         <Button 
           onClick={handleAddNewProduct} 
@@ -65,10 +93,11 @@ function AdminDashboard() {
       <div className="flex flex-col gap-4 mt-5">
         {featureImageList && featureImageList.length > 0
           ? featureImageList.map((featureImgItem) => (
-              <div className="relative">
+              <div className="relative" key={featureImgItem.id}>
                 <img
                   src={featureImgItem.image}
                   className="w-full h-[300px] object-cover rounded-t-lg"
+                  alt="Feature"
                 />
               </div>
             ))

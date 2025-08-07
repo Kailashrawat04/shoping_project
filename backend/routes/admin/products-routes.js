@@ -6,6 +6,8 @@ const {
   editProduct,
   fetchAllProducts,
   deleteProduct,
+  getProductDetails,
+  updateProduct,
 } = require("../../controllers/admin/products-controller");
 
 const { upload } = require("../../helpers/cloudinary");
@@ -17,5 +19,7 @@ router.post("/add", upload.single("image"), addProduct);
 router.put("/edit/:id", editProduct);
 router.delete("/delete/:id", deleteProduct);
 router.get("/get", fetchAllProducts);
+router.get("/details/:id", getProductDetails);
+router.put("/update/:id", updateProduct);
 
 module.exports = router;

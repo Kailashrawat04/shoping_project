@@ -1,8 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
-const ProductTile = ({ product, setFormData, setOpenCreateProductsDialog, setCurrentEditedId, handleDelete }) => {
+const ProductTile = ({ product, handleDelete }) => {
+  const navigate = useNavigate();
+  
   return (
     <Card className="hover:shadow-lg transition-shadow duration-200">
       <CardHeader>
@@ -35,9 +38,7 @@ const ProductTile = ({ product, setFormData, setOpenCreateProductsDialog, setCur
               <Button 
                 size="sm" 
                 onClick={() => {
-                  setFormData(product);
-                  setCurrentEditedId(product._id);
-                  setOpenCreateProductsDialog(true);
+                  navigate(`/admin/update-product/${product._id}`);
                 }}
                 className="bg-blue-600 hover:bg-blue-700"
               >
@@ -67,9 +68,6 @@ ProductTile.propTypes = {
     image: PropTypes.string,
     quantity: PropTypes.number
   }).isRequired,
-  setFormData: PropTypes.func.isRequired,
-  setOpenCreateProductsDialog: PropTypes.func.isRequired,
-  setCurrentEditedId: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired
 };
 

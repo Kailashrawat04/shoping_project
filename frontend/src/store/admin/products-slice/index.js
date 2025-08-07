@@ -34,6 +34,34 @@ export const fetchAllProducts = createAsyncThunk(
   }
 );
 
+export const getProductDetails = createAsyncThunk(
+  "/products/getProductDetails",
+  async (id) => {
+    const result = await axios.get(
+      `/api/admin/products/details/${id}`
+    );
+
+    return result?.data;
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  "/products/updateProduct",
+  async ({ id, formData }) => {
+    const result = await axios.put(
+      `/api/admin/products/update/${id}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return result?.data;
+  }
+);
+
 export const editProduct = createAsyncThunk(
   "/products/editProduct",
   async ({ id, formData }) => {
